@@ -29,7 +29,7 @@ int pick(int from, int thru)
 //gives a double in [from, upto]
 double pick(double from, double upto)
 {
-    static std::uniform_int_distribution<> d{};
+    static std::uniform_real_distribution<> d{};
     using parm_t = decltype(d)::param_type;
     return d(global_urng(),parm_t{from, upto});
 }
