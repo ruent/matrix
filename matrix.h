@@ -6,7 +6,6 @@ class matrix
 {
     size_t numOfRows;
     size_t numOfCols;
-
     vector<T> auxVector;
 
 public:
@@ -20,8 +19,8 @@ public:
 
 
     //accessors
-    size_t numOfRowsGet() const {return numOfRows;}
-    size_t numOfColsGet() const {return numOfCols;}
+    size_t numOfRowsIs() const {return numOfRows;}
+    size_t numOfColsIs() const {return numOfCols;}
     //as in Gottschling, two versions: const and non-const
     const T* operator[] (const size_t rowNum) const
     {
@@ -33,13 +32,55 @@ public:
         return &auxVector[rowNum*numOfCols];
     }
 
+    //swappers
+    void swapper(matrix& rhs)
+    {
+        auxVector.swap(rhs.auxVector);
+        std::swap(numOfRows, rhs.numOfRows);
+        std::swap(numOfCols, rhs.numOfCols);
+    }
+
+    //copy ctor and copy =
+    matrix (const matrix& rhs): 
+        numOfRows(rhs.numOfRows), numOfCols(rhs.numOfCols), 
+        auxVector(rhs.auxVector){}
+    
+    matrix& operator= (const matrix& rhs) 
+    {
+        if (this == &rhs) return *this;
+        matrix<T> thecopyof(rhs);
+        swapper(thecopyof); //this does not feel natural! why create a temp?
+        return *this;
+    }
+
+    //move ctor and =
+    matrix(matrix&& rhs):
+        numOfRows(rhs.numOfRows),
+        numOfCols(rhs.numOfCols),
+        auxVector(move(rhs.auxVector)){}
+
+    matrix operator=(matrix&& rhs)
+    {
+        if (this = &rhs) return *this;
+        matrix<T> temp(move(rhs)); //do we have such a move?
+        swapper(temp);
+        return *this;
+    }
+
+    //extra functions
+    //transpose
+    //isempty
+    //ones, zeros, diagonal
+
+
+
 };
 
 inline void productOfMatrices(const matrix<double>&a, const matrix<double>&b, matrix<double>&c)
 {
-    const size_t n = a.numOfRowsGet();
-    const size_t n_ = a.numOfColsGet();
-    const size_t m = b.numOfColsGet();
+    const size_t n = a.numOfRowsIs();
+    const size_t n_ = a.numOfColsIs();
+    const size_t m = b.numOfColsIs();
 
 
     for (size_t i = 0; i <n; ++i)
@@ -61,9 +102,9 @@ inline void productOfMatrices(const matrix<double>&a, const matrix<double>&b, ma
 
 inline void productOfMatricesFast(const matrix<double>&a, const matrix<double>&b, matrix<double>&c)
 {
-    const size_t n = a.numOfRowsGet();
-    const size_t n_ = a.numOfColsGet();
-    const size_t m = b.numOfColsGet();
+    const size_t n = a.numOfRowsIs();
+    const size_t n_ = a.numOfColsIs();
+    const size_t m = b.numOfColsIs();
 
     for (size_t i = 0; i <n; ++i)
     {
@@ -97,8 +138,8 @@ inline void productOfMatricesFast(const matrix<double>&a, const matrix<double>&b
 
 inline double trace(const matrix<double>& a)
 {   //should be square but still ...
-    const size_t n = a.numOfRowsGet();
-    const size_t m = a.numOfColsGet();
+    const size_t n = a.numOfRowsIs();
+    const size_t m = a.numOfColsIs();
      
 
     double aux(0.0);
