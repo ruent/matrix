@@ -2,25 +2,33 @@
 using namespace std;
 
 template <class T>
-class matrix
+class tree
 {
-    size_t numOfRows;
-    size_t numOfCols;
+    size_t numOfPeriods;
+    size_t numOfInitialNodes;
+    //size_t endPeriod;
     vector<T> auxVector;
 
 public:
-    using value_type = T;
+    //using value_type = T;
     
-    //two constructers
-    matrix(): numOfRows(0), numOfCols(0) {}
+    //two constructors
+    matrix(): numOfPeriods(0), numOfInitialNodes(0) {}
 
-    matrix (const size_t rows, const size_t cols):
-        numOfRows(rows), numOfCols(cols), auxVector(rows*cols) {}
+    //trinomial tree with 1 initial node and k periods will have k**2 entries
+    //suppose ageneral setup where tree can start at other periods
+    //e.g. starts at 2 and ends at 3: then 3 nodes at initial time, and 5 nodes at final
+    // i.e. 8 nodes. Verify that this is 3*3 - 1*1
+    matrix (const size_t periods, const size_t initialnodes):
+        numOfPeriods(periods), numOfInitialNodes(initialnodes), 
+        auxVector( numOfPeriods*(numOfPeriods-1) + numOfPeriods*numOfInitialNodes) {}
 
-
+    //above formula is from k, k+2, ..., k+2(n-1)
+    //for k = numofinitial nodes, n = numofperiods
     //accessors
-    size_t numOfRowsIs() const {return numOfRows;}
-    size_t numOfColsIs() const {return numOfCols;}
+    size_t numOfPeriodsIs() const {return numOfPeriods;}
+    size_t numOfIniNodesIs() const {return numOfInitialNodes;}
+    
     //as in Gottschling, two versions: const and non-const
     const T* operator[] (const size_t rowNum) const
     {

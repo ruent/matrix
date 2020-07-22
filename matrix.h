@@ -9,8 +9,6 @@ class matrix
     vector<T> auxVector;
 
 public:
-    using value_type = T;
-    
     //two constructers
     matrix(): numOfRows(0), numOfCols(0) {}
 
