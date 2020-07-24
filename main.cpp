@@ -1,9 +1,21 @@
+#pragma once
 #include <iostream>
 #include "randomness.h"
 #include "matrix.h"
+#include "lgaussmarkov/model.h"
+ 
 #include <chrono>
 
 using namespace std;
+
+int main()
+{
+    lgmmeanreversion k(0.01);
+    cout<<"hey whats up?"<<"\n";
+    cout<<k(0)<<"\n";
+}
+/*
+matrix test
 int main()
 {
     cout<<"hey whats up?"<<"\n"; 
@@ -43,3 +55,4 @@ int main()
     std::cout << "Finished in " << cpu_duration << " seconds [CPU Clock] " << std::endl;
 
 }
+*/
