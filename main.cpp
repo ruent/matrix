@@ -1,9 +1,9 @@
 //#pragma once
 #include <iostream>
+
+#include "lgaussmarkov/model.h"
 #include "randomness.h"
-#include "matrix.h"
-#include "home/edogan/projects/lgaussmarkov/model.h"
- 
+#include "matrix.h" 
 #include <chrono>
 
 using namespace std;
