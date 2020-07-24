@@ -1,8 +1,8 @@
-#pragma once
+//#pragma once
 #include <iostream>
 #include "randomness.h"
 #include "matrix.h"
-#include "lgaussmarkov/model.h"
+#include "home/edogan/projects/lgaussmarkov/model.h"
  
 #include <chrono>
 
