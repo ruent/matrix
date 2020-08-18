@@ -1,3 +1,4 @@
+#pragma once
 #include<vector>
 using namespace std;
 
@@ -28,6 +29,30 @@ public:
     T* operator[] (const size_t rowNum)
     {
         return &auxVector[rowNum*numOfCols];
+    }
+
+    //iterators, I need these in solvers 
+    //see if anyone else (Gottshcling etc.) need to define these as I
+    //AUTO can replace typename vector<T>::iterator!
+    //but learn first
+    //typename is a C++ requirement: see:
+    //https://stackoverflow.com/questions/610245/
+    //where-and-why-do-i-have-to-put-the-template-and-typename-keywords/17579889#17579889
+    typename vector<T>::iterator beginiteruent(const size_t rowNum)
+    {
+        return auxVector.begin()+(rowNum*numOfCols);
+    }
+    typename vector<T>::iterator enditeruent(const size_t rowNum)
+    {
+        return auxVector.begin()+(rowNum*numOfCols+numOfCols);
+    }
+    typename vector<T>::const_iterator beginiteruent(const size_t rowNum) const
+    {
+        return auxVector.begin()+(rowNum*numOfCols);
+    }
+    typename vector<T>::const_iterator enditeruent(const size_t rowNum) const
+    {
+        return auxVector.begin()+(rowNum*numOfCols+numOfCols);
     }
 
     //swappers
@@ -69,10 +94,10 @@ public:
     //transpose
     //isempty
     //ones, zeros, diagonal
-
-
-
 };
+
+//above Matrix returns A[i] as a row, and then
+
 
 inline void productOfMatrices(const matrix<double>&a, const matrix<double>&b, matrix<double>&c)
 {
@@ -111,7 +136,6 @@ inline void productOfMatricesFast(const matrix<double>&a, const matrix<double>&b
         {
             ci[j] = 0;
         }
-
     }
 
     #pragma omp parallel for 
@@ -119,7 +143,6 @@ inline void productOfMatricesFast(const matrix<double>&a, const matrix<double>&b
     {
         const auto ai = a[i];
         auto ci = c[i];
-
         for (size_t k=0; k <m; ++k)
         {
             const auto bk = b[k];
