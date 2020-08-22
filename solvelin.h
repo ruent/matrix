@@ -89,3 +89,44 @@ std::vector<double> solveEqn(matrix<double> &A, std::vector<double> &y)
 	  
 	return solution;
 }
+
+//solve tridiagonal matrix
+//here matrix is still a matrix, not a sparse matrix
+//label the diagonal with d, upper diagonal with u, lower with l
+//first row: d_0, u_0, or A[0,0], A[0,1]
+//second row l_1 d_1 u_1 etc. A[1,0], A[1,1], A[1,2]
+std::vector<double> solveEqnTridiagonal(matrix<double> &A, std::vector<double> &y)
+{
+	 
+	unsigned int n = A.numOfRowsIs();
+	unsigned int m = A.numOfColsIs();
+
+	//matrix is row-contiguous
+	//go from row 0 to n-1
+	//for row i= 1 to n-1: 
+	//    A[i,i] = A[i,i] (diago)- A[i-1,i](upper) 
+	//                * A[i,i-1](lower) / A[i-1,i-1]
+	//
+	//    y[i] = y[i] - y[i-1]
+	//                * A[i,i-1](lower) / A[i-1,i-1]
+	//
+	//the matrix became upper triangular
+	//now go backwards to solve for x:
+	// x_{n-1} = y_{n-1}/A[n-1,n-1]
+	//for row j = n-2 to 0
+	//    x[j] = (y[j] - A[j,j+1] * x[j+1])/ A[j,j] 
+	for (int i = 1; i<n; ++i)
+	{
+		A[i][i] = A[i][i] - A[i-1][i]*A[i][i-1]/A[i-1][i-1];
+		y[i] = y[i] - y[i-1] * A[i][i-1]/A[i-1][i-1];   
+	}
+
+	std::vector<double> solution(n); 
+	solution[n - 1] = y[n-1] / A[n - 1][n - 1];
+	for (int i = 2; i <= n; ++i)
+	{		 
+		solution[n - i] = (y[n - i] - A[i][i+1] * solution[n - i +1] ) / A[n - i][n - i];
+	}
+
+	return solution;
+}
