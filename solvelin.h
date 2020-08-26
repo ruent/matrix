@@ -8,8 +8,8 @@
 std::vector<double> solveEqn(matrix<double> &A, std::vector<double> &y)
 {
 	 
-	unsigned int n = A.numOfRowsIs();
-	unsigned int m = A.numOfColsIs();
+	size_t n = A.numOfRowsIs();
+	size_t m = A.numOfColsIs();
 	//this code is for square systems so
 	//assert(n == m);	 
 
@@ -31,12 +31,12 @@ std::vector<double> solveEqn(matrix<double> &A, std::vector<double> &y)
 	}
 	
 	//first iterate over columns: 
-	for (unsigned int j = 0; j < m - 1; ++j)
+	for (size_t j = 0; j < m - 1; ++j)
 	{
 		//find the index of the maximum of abs(element) in a column, for each column
 		double relative_col_max = 0;
 		double relative_col_max_prev = 0;
-		int index_of_max = j;
+		size_t index_of_max = j;
 		for (unsigned int i = j; i < n; ++i)
 		{
 			if (abs(A[i][j]) / max_in_a_row_all[i] > relative_col_max)
@@ -62,10 +62,10 @@ std::vector<double> solveEqn(matrix<double> &A, std::vector<double> &y)
         //multiply and subtract step
         //this middle school algebra should be applied
         //both to A and y.
-		for (unsigned int i = j + 1; i < n; ++i)
+		for (size_t i = j + 1; i < n; ++i)
 		{
 			xxx = A[i][j] / A[j][j];
-			for (unsigned int k = 0; k < m; ++k)
+			for (size_t k = 0; k < m; ++k)
 			{
 				A[i][k] = A[i][k] - xxx * A[j][k];
 			}
@@ -77,10 +77,10 @@ std::vector<double> solveEqn(matrix<double> &A, std::vector<double> &y)
 	*/ 
 	std::vector<double> solution(n);	 
 	solution[n - 1] = y[n-1] / A[n - 1][n - 1];
-	for (unsigned int i = 2; i <= n; ++i)
+	for (size_t i = 2; i <= n; ++i)
 	{
 		double aux = 0;
-		for (unsigned int j = n - i + 1; j < n; ++j)
+		for (size_t j = n - i + 1; j < n; ++j)
 		{
 			aux += A[n - i][j] * solution[j];
 		}
@@ -98,8 +98,8 @@ std::vector<double> solveEqn(matrix<double> &A, std::vector<double> &y)
 std::vector<double> solveEqnTridiagonal(matrix<double> &A, std::vector<double> &y)
 {
 	 
-	unsigned int n = A.numOfRowsIs();
-	unsigned int m = A.numOfColsIs();
+	size_t n = A.numOfRowsIs();
+	size_t m = A.numOfColsIs();
 
 	//matrix is row-contiguous
 	//go from row 0 to n-1
@@ -115,7 +115,7 @@ std::vector<double> solveEqnTridiagonal(matrix<double> &A, std::vector<double> &
 	// x_{n-1} = y_{n-1}/A[n-1,n-1]
 	//for row j = n-2 to 0
 	//    x[j] = (y[j] - A[j,j+1] * x[j+1])/ A[j,j] 
-	for (int i = 1; i<n; ++i)
+	for (size_t i = 1; i<n; ++i)
 	{
 		A[i][i] = A[i][i] - A[i-1][i]*A[i][i-1]/A[i-1][i-1];
 		y[i] = y[i] - y[i-1] * A[i][i-1]/A[i-1][i-1];   
@@ -123,7 +123,7 @@ std::vector<double> solveEqnTridiagonal(matrix<double> &A, std::vector<double> &
 
 	std::vector<double> solution(n); 
 	solution[n - 1] = y[n-1] / A[n - 1][n - 1];
-	for (int i = 2; i <= n; ++i)
+	for (size_t i = 2; i <= n; ++i)
 	{		 
 		solution[n - i] = (y[n - i] - A[i][i+1] * solution[n - i +1] ) / A[n - i][n - i];
 	}
