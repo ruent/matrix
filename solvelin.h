@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 #include <vector>
 #include <algorithm> //for max_element
 #include <cassert>
